@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vital Roots - Healthy Restaurant Menu</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto:wght@300;400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #e0f7ec, #fdfcfb);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(90deg, #7bc96f, #88b04b);
+      color: white;
+      padding: 2.5rem 1rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      position: relative;
+      font-family: 'Playfair Display', serif;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.3rem;
+      user-select: none;
+    }
+
+    .tagline {
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.3rem;
+      user-select: none;
+      color: #dff0d8;
+      text-shadow: 0 0 5px #4a7c35;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      font-weight: 600;
+      user-select: none;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #7bc96f;
+      font-size: 1.1rem;
+      transition: color 0.3s, border-bottom 0.3s;
+      padding-bottom: 0.25rem;
+      border-bottom: 3px solid transparent;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #4a7c35;
+      border-bottom: 3px solid #4a7c35;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 3rem auto 4rem;
+      padding: 0 2rem;
+      flex-grow: 1;
+    }
+
+    section {
+      margin-bottom: 3.5rem;
+    }
+
+    section h2 {
+      color: #7bc96f;
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #88b04b;
+      padding-bottom: 0.6rem;
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Cards container */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.8rem;
+    }
+
+    /* Each food card */
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(102, 143, 71, 0.1);
+      padding: 1.6rem 1.8rem 2rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      user-select: none;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(102, 143, 71, 0.25);
+    }
+
+    .card.active {
+      background: #e7f5d4;
+      box-shadow: 0 15px 35px rgba(102, 143, 71, 0.4);
+    }
+
+    .item-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #466c27;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    .item-description {
+      font-size: 1rem;
+      color: #4b4b4b;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      display: none;
+    }
+
+    .card.active .item-description {
+      display: block;
+    }
+
+    /* Allergens and spicy info container */
+    .info-icons {
+      display: flex;
+      gap: 0.9rem;
+      font-size: 0.95rem;
+      color: #4a7c35;
+      flex-wrap: wrap;
+      user-select: none;
+    }
+
+    /* Icon styling */
+    .info-icons span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #dff0d8;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #3b5520;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    }
+
+    .info-icons span svg {
+      width: 14px;
+      height: 14px;
+      fill: #3b5520;
+    }
+
+    /* Spicy icon style */
+    .spicy {
+      color: #d9534f;
+      font-weight: 700;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.8rem 1rem;
+      background-color: #f0f4f2;
+      font-size: 0.9rem;
+      color: #777;
+      user-select: none;
+    }
+
+    /* Scroll smooth for nav */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vital Roots</h1>
+    <p class="tagline">Where Wellness Meets Flavor</p>
+  </header>
+
+  <nav>
+    <a href="#starters" class="active">Starters</a>
+    <a href="#mains">Main Courses</a>
+    <a href="#desserts">Desserts</a>
+    <a href="#beverages">Beverages</a>
+  </nav>
+
+  <main>
+    <section id="starters">
+      <h2>🥑 Starters</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="item-name">Hummus Trio with Veggie Sticks</div>
+          <div class="item-description">
+            Classic, beetroot, and roasted red pepper hummus served with carrot, cucumber, and bell pepper sticks.
+          </div>
+          <div class="info-icons">
+            <span title="Contains Gluten">🌾 Gluten</span>
+            <span title="Contains Sesame">🌰 Sesame</span>
+            <span title="Not Spicy">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Stuffed Avocado Boats</div>
+          <div class="item-description">
+            Avocado halves filled with quinoa, black beans, corn, and a lime-chili dressing.
+          </div>
+          <div class="info-icons">
+            <span title="Contains Chili">🌶️ Spicy</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Vegan">🌱 Vegan</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Baked Falafel Bites</div>
+          <div class="item-description">Served with a creamy tahini-yogurt dip.</div>
+          <div class="info-icons">
+            <span title="Contains Dairy">🥛 Dairy</span>
+            <span title="Contains Sesame">🌰 Sesame</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Mini Lentil & Spinach Patties</div>
+          <div class="item-description">Oven-baked patties served with mint chutney.</div>
+          <div class="info-icons">
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Zucchini Chips</div>
+          <div class="item-description">Lightly breaded and oven-baked, served with a zesty yogurt dip.</div>
+          <div class="info-icons">
+            <span title="Contains Dairy">🥛 Dairy</span>
+            <span title="Contains Gluten">🌾 Gluten</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Edamame with Sea Salt & Lemon</div>
+          <div class="item-description">Steamed and lightly seasoned — protein-packed and satisfying.</div>
+          <div class="info-icons">
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Caprese Skewers</div>
+          <div class="item-description">
+            Cherry tomatoes, basil, and mozzarella on a stick with balsamic glaze.
+          </div>
+          <div class="info-icons">
+            <span title="Contains Dairy">🥛 Dairy</span>
+            <span title="Not Spicy">🌿 Mild</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mains">
+      <h2>🥗 Main Courses</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="item-name">Grilled Lemon-Herb Chicken Bowl</div>
+          <div class="item-description">
+            Quinoa, roasted vegetables, kale, chickpeas, and tahini drizzle.
+          </div>
+          <div class="info-icons">
+            <span title="Contains Dairy">🥛 Dairy</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Rainbow Veggie Stir-Fry with Tofu</div>
+          <div class="item-description">
+            Broccoli, bell peppers, carrots, and snap peas in a ginger-garlic sauce over brown rice.
+          </div>
+          <div class="info-icons">
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Zucchini Noodle Pesto Pasta</div>
+          <div class="item-description">
+            Zoodles tossed with cashew-basil pesto, cherry tomatoes, and toasted seeds.
+          </div>
+          <div class="info-icons">
+            <span title="Contains Nuts">🥜 Nuts</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Baked Salmon with Avocado Salsa</div>
+          <div class="item-description">Served with wild rice and steamed greens.</div>
+          <div class="info-icons">
+            <span title="Contains Fish">🐟 Fish</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Sweet Potato & Black Bean Wrap</div>
+          <div class="item-description">Whole wheat wrap, creamy hummus, and fresh spinach.</div>
+          <div class="info-icons">
+            <span title="Contains Gluten">🌾 Gluten</span>
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="desserts">
+      <h2>🍓 Desserts</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="item-name">Chia Coconut Pudding</div>
+          <div class="item-description">Topped with mango puree and toasted almonds.</div>
+          <div class="info-icons">
+            <span title="Contains Nuts">🥜 Nuts</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Vegan">🌱 Vegan</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Avocado Chocolate Mousse</div>
+          <div class="item-description">
+            Silky smooth with raw cacao, dates, and a hint of vanilla.
+          </div>
+          <div class="info-icons">
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Not Spicy">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Frozen Yogurt Berry Bark</div>
+          <div class="item-description">
+            Low-fat Greek yogurt topped with mixed berries and honey drizzle.
+          </div>
+          <div class="info-icons">
+            <span title="Contains Dairy">🥛 Dairy</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Banana Oat Cookies</div>
+          <div class="item-description">No added sugar — just bananas, oats, and a dash of cinnamon.</div>
+          <div class="info-icons">
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="beverages">
+      <h2>🥤 Beverages</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="item-name">Green Glow Smoothie</div>
+          <div class="item-description">Spinach, pineapple, banana, ginger, and almond milk.</div>
+          <div class="info-icons">
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Detox Cucumber-Mint Water</div>
+          <div class="item-description">Infused with lemon and fresh herbs.</div>
+          <div class="info-icons">
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Golden Turmeric Latte</div>
+          <div class="item-description">
+            Plant-based milk, turmeric, cinnamon, and a touch of maple.
+          </div>
+          <div class="info-icons">
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-name">Cold-Pressed Carrot-Orange Juice</div>
+          <div class="item-description">Packed with Vitamin C and natural sweetness.</div>
+          <div class="info-icons">
+            <span title="Vegan">🌱 Vegan</span>
+            <span title="Gluten Free">✅ Gluten-Free</span>
+            <span title="Mild">🌿 Mild</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Vital Roots. Eat clean, feel green!</p>
+  </footer>
+
+  <script>
+    // Toggle active card to show/hide description and highlight
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('active');
+      });
+    });
+
+    // Highlight nav based on scroll position (optional enhancement)
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach((section) => {
+const sectionTop = section.offsetTop - 80;
+if (pageYOffset >= sectionTop) {
+current = section.getAttribute('id');
+}
+});
+navLinks.forEach((link) => {
+link.classList.remove('active');
+if (link.getAttribute('href').includes(current)) {
+link.classList.add('active');
+}
+});
+});
+</script>
+
+</body> </html>
